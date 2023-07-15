@@ -15,6 +15,7 @@ class signUP_view extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height: Get.height*0.2,),
               Center(
                 child: Text(
                   'Lets chat',
@@ -96,7 +97,8 @@ class signUP_view extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Get.to(completeProfilePage());
+                  // Get.to(completeProfilePage());
+                  signcontroller.getvalues_and_check();
                 },
                 child: Text('SignUp'),
               ),

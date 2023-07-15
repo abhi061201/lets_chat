@@ -18,6 +18,7 @@ class login_view extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height: Get.height*0.2,),
               Center(
                 child: Text(
                   'Lets chat',
@@ -75,7 +76,9 @@ class login_view extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  loginController.get_values_and_signup();
+                },
                 child: Text('Login'),
               ),
               SizedBox(
@@ -96,9 +99,9 @@ class login_view extends StatelessWidget {
                         color: Colors.deepPurple,
                       ),
                       recognizer: TapGestureRecognizer()..onTap = () => {
-                        Get.off(signUP_view())
+                        Get.off(login_view())
                       },
-                      text: 'Sign Up',
+                      text: 'Login',
                     )
                   ],
                 ),
