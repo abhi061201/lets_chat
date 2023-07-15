@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lets_chat/app/modules/auth/login/view/login_view.dart';
 import 'package:lets_chat/app/modules/auth/signUp/controller/signup_controller.dart';
 import 'package:lets_chat/app/modules/auth/signUp/view/completeProfilePage.dart';
 
@@ -119,8 +120,10 @@ class signUP_view extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Colors.deepPurple,
                       ),
-                      recognizer: TapGestureRecognizer()..onTap = () => {},
-                      text: 'Sign Up',
+                      recognizer: TapGestureRecognizer()..onTap = () => {
+                        Get.off(()=>login_view()),
+                      },
+                      text: 'Login',
                     )
                   ],
                 ),

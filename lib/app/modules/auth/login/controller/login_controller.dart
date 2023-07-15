@@ -11,7 +11,8 @@ class login_controller extends GetxController {
   void get_values_and_signup() {
     String email = email_controller.text.trim();
     String password = password_controller.text.trim();
-    signin(email, password);
+    if(email==""|| password=="")print('Fields could not be empty');
+    else signin(email, password);
   }
 
   void signin(String email, String password) async {

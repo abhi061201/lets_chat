@@ -99,9 +99,9 @@ class login_view extends StatelessWidget {
                         color: Colors.deepPurple,
                       ),
                       recognizer: TapGestureRecognizer()..onTap = () => {
-                        Get.off(login_view())
+                        Get.off(signUP_view())
                       },
-                      text: 'Login',
+                      text: 'SignUp',
                     )
                   ],
                 ),
