@@ -75,12 +75,12 @@ class login_view extends StatelessWidget {
                   ),
                 ),
               ),
-              ElevatedButton(
+              Obx(() => ElevatedButton(
                 onPressed: () {
                   loginController.get_values_and_signup();
                 },
-                child: Text('Login'),
-              ),
+                child:loginController.login.value==false? Text('Login'):CircularProgressIndicator(),
+              ),),
               SizedBox(
                 height: Get.height * 0.3,
               ),

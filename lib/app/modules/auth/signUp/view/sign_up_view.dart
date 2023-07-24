@@ -1,13 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lets_chat/app/modules/auth/login/view/login_view.dart';
 import 'package:lets_chat/app/modules/auth/signUp/controller/signup_controller.dart';
 import 'package:lets_chat/app/modules/auth/signUp/view/completeProfilePage.dart';
+import 'package:lets_chat/app/modules/user/model/UserModel.dart';
 
 class signUP_view extends StatelessWidget {
-  signUP_view({super.key});
+  
+  signUP_view({super.key });
   signup_controller signcontroller = Get.put(signup_controller());
+  
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -16,7 +20,9 @@ class signUP_view extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: Get.height*0.2,),
+              SizedBox(
+                height: Get.height * 0.2,
+              ),
               Center(
                 child: Text(
                   'Lets chat',
@@ -96,12 +102,16 @@ class signUP_view extends StatelessWidget {
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  // Get.to(completeProfilePage());
-                  signcontroller.getvalues_and_check();
-                },
-                child: Text('SignUp'),
+              Obx(
+                () => ElevatedButton(
+                  onPressed: () {
+                    // Get.to(completeProfilePage());
+                    signcontroller.getvalues_and_check();
+                  },
+                  child: signcontroller.signupbutton.value == false
+                      ? Text('SignUp')
+                      : CircularProgressIndicator(),
+                ),
               ),
               SizedBox(
                 height: Get.height * 0.3,
@@ -120,9 +130,10 @@ class signUP_view extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Colors.deepPurple,
                       ),
-                      recognizer: TapGestureRecognizer()..onTap = () => {
-                        Get.off(()=>login_view()),
-                      },
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => {
+                              Get.off(() => login_view()),
+                            },
                       text: 'Login',
                     )
                   ],
