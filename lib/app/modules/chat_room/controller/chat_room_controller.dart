@@ -72,7 +72,11 @@ class chat_room_controller extends GetxController {
           .collection('messages')
           .doc(newMsgModel.msgId)
           .set(newMsgModel.toMap());
-
+      chatRoomModel.lastmsg = msg;
+      FirebaseFirestore.instance
+          .collection('chatrooms')
+          .doc(chatRoomModel.chatRoomId)
+          .set(chatRoomModel.toMap());
       log('msg sent!');
       msgcontroller.clear();
     }

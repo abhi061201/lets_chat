@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lets_chat/app/modules/Message/message_model.dart';
 import 'package:lets_chat/app/modules/chat_room/controller/chat_room_controller.dart';
 import 'package:lets_chat/app/modules/chat_room/model/chatRoomModel.dart';
 import 'package:lets_chat/app/modules/user/model/UserModel.dart';
@@ -21,7 +23,7 @@ class chat_room extends StatelessWidget {
   chat_room_controller controller = Get.put(chat_room_controller());
   @override
   Widget build(BuildContext context) {
-    String username = currentusermodel.fullName.toString();
+    String username = targetUser.fullName.toString();
 
     username = username[0].toString().toUpperCase() + username.substring(1);
     print(username.toString());
@@ -55,7 +57,7 @@ class chat_room extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundImage: NetworkImage(
-                currentusermodel.profilePicUrl.toString(),
+                targetUser.profilePicUrl.toString(),
               ),
               radius: 20,
             ),
@@ -68,7 +70,60 @@ class chat_room extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(child: Container()),
+          Expanded(
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('chatrooms')
+                  .doc(chatRoomModel.chatRoomId)
+                  .collection('messages')
+                  .orderBy('create_msg_time', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.active) {
+                  if (snapshot.hasData) {
+                    QuerySnapshot datasnapshot = snapshot.data as QuerySnapshot;
+
+                    return ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      reverse: true,
+                      itemCount: datasnapshot.docs.length,
+                      itemBuilder: (context, index) {
+                        Message_model cur_message = Message_model.fromMap(
+                            datasnapshot.docs[index].data()
+                                as Map<String, dynamic>);
+                        return Row(
+                          mainAxisAlignment:
+                              cur_message.sender == currentusermodel.uid
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.all(8),
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color:
+                                    cur_message.sender == currentusermodel.uid
+                                        ? Colors.teal
+                                        : Colors.grey,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(cur_message.text.toString()),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                } else {
+                  return Center(
+                    child: Text('Pleas check your internet connection'),
+                  );
+                }
+              },
+            ),
+          ),
           Container(
             height: 60,
             margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
@@ -77,7 +132,7 @@ class chat_room extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10)),
             child: Row(
               children: [
-                Flexible(
+                Expanded(
                   child: TextFormField(
                     controller: controller.msgcontroller,
                     decoration: InputDecoration(
