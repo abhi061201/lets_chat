@@ -52,7 +52,7 @@ class chat_room extends StatelessWidget {
             ),
           ),
         ],
-        leadingWidth: 20,
+        leadingWidth: 25,
         title: Row(
           children: [
             CircleAvatar(
@@ -62,9 +62,16 @@ class chat_room extends StatelessWidget {
               radius: 20,
             ),
             SizedBox(
-              width: 8,
+              width:8,
             ),
-            Text(username),
+            Container(
+              width: Get.width*0.3,
+              child: Text(
+                username,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ),
           ],
         ),
       ),

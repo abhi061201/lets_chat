@@ -25,7 +25,7 @@ class imagePickerController extends GetxController {
         ratioX: 1,
         ratioY: 1,
       ),
-      compressQuality: 1000,
+      compressQuality: 90,
     );
 
     if (croppedImage != null) {

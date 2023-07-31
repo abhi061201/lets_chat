@@ -58,7 +58,7 @@ class chat_room_controller extends GetxController {
 
   void getandsend(String msg, UserModel currentUsermodel,
       UserModel targetUsermodel, ChatRoomModel chatRoomModel) async {
-    if (msg != null) {
+    if (msg != "") {
       Message_model newMsgModel = Message_model(
         msgId: uuid.v1(),
         seen: false,
@@ -79,6 +79,9 @@ class chat_room_controller extends GetxController {
           .set(chatRoomModel.toMap());
       log('msg sent!');
       msgcontroller.clear();
+    }
+    else {
+      log('please enter some message');
     }
   }
 }
