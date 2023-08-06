@@ -58,7 +58,8 @@ class Home_view extends StatelessWidget {
           StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('chatrooms')
-                .where('participants.${userModel.uid}', isEqualTo: true)
+                .where('users', arrayContains: userModel.uid,)
+                .orderBy('last_chat_time',descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.active) {
@@ -67,6 +68,7 @@ class Home_view extends StatelessWidget {
                       snapshot.data as QuerySnapshot;
                   return Expanded(
                     child: ListView.builder(
+                      // reverse: true,
                       itemCount: chatroomsnapshot.docs.length,
                       itemBuilder: (context, index) {
                         ChatRoomModel chatroomModel = ChatRoomModel.fromMap(
@@ -83,10 +85,10 @@ class Home_view extends StatelessWidget {
                               .getCurrentUserModel(participantsKeys[0]),
                           builder: (context, userData) {
                             if (userData.hasData) {
-                              
                               UserModel targetUser = userData.data as UserModel;
-                              String username= targetUser.fullName!;
-                              username= username[0].toUpperCase()+username.substring(1);
+                              String username = targetUser.fullName!;
+                              username = username[0].toUpperCase() +
+                                  username.substring(1);
                               return ListTile(
                                 onTap: () {
                                   Get.to(
@@ -127,18 +129,18 @@ class Home_view extends StatelessWidget {
                       },
                     ),
                   );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(snapshot.error.toString()),
+                  );
                 } else {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('An Error Occured'),
-                );
               } else {
                 return Center(
-                  child: CircularProgressIndicator(),
+                  child: Text('No data found'),
                 );
               }
             },

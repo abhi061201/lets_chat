@@ -41,6 +41,11 @@ class chat_room_controller extends GetxController {
       ChatRoomModel newchatroomModel = ChatRoomModel(
         chatRoomId: uuid.v1(),
         lastmsg: "",
+        last_chat_time: DateTime.now(),
+        users: [
+           currentUsermodel.uid.toString(),
+           targetUsermodel.uid.toString()
+        ],
         participants: {
           targetUsermodel.uid.toString(): true,
           currentUsermodel.uid.toString(): true,
@@ -73,14 +78,15 @@ class chat_room_controller extends GetxController {
           .doc(newMsgModel.msgId)
           .set(newMsgModel.toMap());
       chatRoomModel.lastmsg = msg;
+      chatRoomModel.last_chat_time= DateTime.now();
+      
       FirebaseFirestore.instance
           .collection('chatrooms')
           .doc(chatRoomModel.chatRoomId)
           .set(chatRoomModel.toMap());
       log('msg sent!');
       msgcontroller.clear();
-    }
-    else {
+    } else {
       log('please enter some message');
     }
   }
